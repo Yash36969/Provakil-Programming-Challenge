@@ -1,0 +1,33 @@
+def calculate_subscription(expiry_date, months_to_buy, monthly_cost):
+    # Parse the expiry_date string into day, month, and year
+    day, month, year = map(int, expiry_date.split('/'))
+
+ 
+    if day < 15:
+        next_billing_cycle = 15
+    else:
+        next_billing_cycle = 1
+        month += 1
+        if month > 12:
+            month = 1
+            year += 1
+
+  
+    days_in_first_month = min(next_billing_cycle - day, 30)
+
+    cost_of_first_month = days_in_first_month * (monthly_cost / 30)
+
+    cost_of_remaining_months = (months_to_buy - 1) * monthly_cost
+
+    total_cost = cost_of_first_month + cost_of_remaining_months
+
+    
+    new_expiry = "{:02d}/{:02d}/{:04d}".format(next_billing_cycle, month, year)
+    for i in range(months_to_buy - 1):
+        month += 1
+        if month > 12:
+            month = 1
+            year += 1
+        new_expiry = "{:02d}/{:02d}/{:04d}".format(next_billing_cycle, month, year)
+
+    return (new_expiry, round(total_cost, 2))
